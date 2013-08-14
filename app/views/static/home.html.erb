@@ -1,0 +1,89 @@
+<div style="position: absolute; top: 50px; left: 50px;">
+	<canvas id="canvas" width="500" height="500" style="border: 2px solid black;">
+	 Your browser does not support HTML5 Canvas.
+	 file:///H:/proj/canvas/image.html
+	</canvas>
+</div>
+<a id="capture" href="javascript:void(0)">Capture</a>
+
+<% content_for :script do %>
+	<script type="text/javascript">
+			window.addEventListener('load', eventWindowLoaded, false);
+			function eventWindowLoaded() {
+			   canvasApp();
+			}
+			
+			function canvasApp(){
+				var theCanvas = document.getElementById("canvas");
+				var cvsStk = new CanvasStack("canvas");
+				var context = theCanvas.getContext("2d");
+				var layer1_ID = cvsStk.createLayer();
+				var L1_ctx = document.getElementById(layer1_ID).getContext('2d');
+				
+				var tShirt = new Image();
+				tShirt.addEventListener('load', eventShipLoaded, false);
+				tShirt.src = "/assets/tshirt.png";
+				
+				var tree = new Image();
+				tree.src = "/assets/tree.png";
+				
+				function eventShipLoaded(){
+					drawScreen();
+				}
+				
+				function drawScreen() {
+					
+					context.fillStyle = "#ffffff"
+					context.fillRect(0, 0, 500, 500);
+					
+					context.drawImage(tShirt, 50, 50);
+					
+					var new_can = document.getElementById(layer1_ID);
+					new_can.style.border = "1px solid red";
+					new_can.style.width = "292px";
+					new_can.style.height = "256px";
+					new_can.style.top = "104px";
+					new_can.style.left = "122px";
+					L1_ctx.scale(500/292, 500/256);
+					L1_ctx.drawImage(tree, 0, 0);
+					
+					var counter_top = 104;
+					var counter_left = 122;
+					
+					$('#'+layer1_ID).draggable({
+						drag: function(event, ui) {
+							$(this).parent().css('top', (ui.position.top + counter_top));
+							$(this).parent().css('left', (ui.position.left + counter_left));
+						},
+						
+						stop: function(event, ui) {
+							counter_top = ui.position.top + counter_top;
+							counter_left = ui.position.left + counter_left;
+						}
+					});
+					
+					$('#'+layer1_ID).resizable();
+					
+				}
+				
+			}
+			
+			$(document).ready(function(){
+				
+				$('#capture').click(function(){
+					var theCanvas = document.getElementById("canvas");
+					var context = theCanvas.getContext("2d");
+					context.save();
+					
+					var x = $($('canvas')[1]).width()/500;
+					var y = $($('canvas')[1]).height()/500;
+					
+					context.scale(x, y);
+					
+					context.drawImage($('canvas')[1], (1/x)*($($('canvas')[1]).parent().position().left - 2), (1/y)*($($('canvas')[1]).parent().position().top - 2) );
+					context.restore();
+					
+				});
+			});
+		</script>
+<% end %>
