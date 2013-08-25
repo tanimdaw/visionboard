@@ -2,3 +2,19 @@
 	display: inline-block;
 	border: 2px solid green;
 }
+
+.ui-resizable-ne, 
+.ui-resizable-se,
+.ui-resizable-sw,
+.ui-resizable-nw {
+	border: 3px solid yellow;
+	background-color: yellow;
+}
+
+.ui-resizable-n, 
+.ui-resizable-s,
+.ui-resizable-w,
+.ui-resizable-e {
+	border: 1px solid red;
+	background-color: red;
+}

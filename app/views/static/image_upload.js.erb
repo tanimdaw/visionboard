@@ -1,0 +1,9 @@
+// $('#image-container').html("<%= j image_tag(@image.image_url) %>");
+// loadNewCanvas();
+
+var image = new Image();
+// alert(2);
+image.src = "<%= j @image.image_url %>";
+// alert(3);
+image.addEventListener('load', function(){ new canvasLayer(image) } , false);
+// alert(4);

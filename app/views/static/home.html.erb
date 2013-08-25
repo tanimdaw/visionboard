@@ -1,89 +1,251 @@
 <div style="position: absolute; top: 50px; left: 50px;">
-	<canvas id="canvas" width="500" height="500" style="border: 2px solid black;">
+	<canvas id="canvas" width="1100" height="900" style="border: 2px solid black;">
 	 Your browser does not support HTML5 Canvas.
 	 file:///H:/proj/canvas/image.html
 	</canvas>
 </div>
+
+<%= form_tag(image_upload_path, :multipart => true, :id => "upload-image") do %>
+	<%= file_field_tag "image" %>
+	<%= submit_tag "submit" %>
+<% end -%>
+<div id="image-container" style="display: none;">
+	<img src="/uploads/image/image/23/3q1opw.jpg" alt="3q1opw">
+</div>
+
 <a id="capture" href="javascript:void(0)">Capture</a>
 
 <% content_for :script do %>
 	<script type="text/javascript">
-			window.addEventListener('load', eventWindowLoaded, false);
-			function eventWindowLoaded() {
-			   canvasApp();
-			}
+
+
 			
-			function canvasApp(){
-				var theCanvas = document.getElementById("canvas");
-				var cvsStk = new CanvasStack("canvas");
-				var context = theCanvas.getContext("2d");
-				var layer1_ID = cvsStk.createLayer();
-				var L1_ctx = document.getElementById(layer1_ID).getContext('2d');
-				
-				var tShirt = new Image();
-				tShirt.addEventListener('load', eventShipLoaded, false);
-				tShirt.src = "/assets/tshirt.png";
-				
-				var tree = new Image();
-				tree.src = "/assets/tree.png";
-				
-				function eventShipLoaded(){
-					drawScreen();
-				}
-				
-				function drawScreen() {
-					
-					context.fillStyle = "#ffffff"
-					context.fillRect(0, 0, 500, 500);
-					
-					context.drawImage(tShirt, 50, 50);
-					
-					var new_can = document.getElementById(layer1_ID);
-					new_can.style.border = "1px solid red";
-					new_can.style.width = "292px";
-					new_can.style.height = "256px";
-					new_can.style.top = "104px";
-					new_can.style.left = "122px";
-					L1_ctx.scale(500/292, 500/256);
-					L1_ctx.drawImage(tree, 0, 0);
-					
-					var counter_top = 104;
-					var counter_left = 122;
-					
-					$('#'+layer1_ID).draggable({
-						drag: function(event, ui) {
-							$(this).parent().css('top', (ui.position.top + counter_top));
-							$(this).parent().css('left', (ui.position.left + counter_left));
-						},
-						
-						stop: function(event, ui) {
-							counter_top = ui.position.top + counter_top;
-							counter_left = ui.position.left + counter_left;
-						}
-					});
-					
-					$('#'+layer1_ID).resizable();
-					
-				}
-				
-			}
+
 			
-			$(document).ready(function(){
-				
-				$('#capture').click(function(){
-					var theCanvas = document.getElementById("canvas");
-					var context = theCanvas.getContext("2d");
-					context.save();
-					
-					var x = $($('canvas')[1]).width()/500;
-					var y = $($('canvas')[1]).height()/500;
-					
-					context.scale(x, y);
-					
-					context.drawImage($('canvas')[1], (1/x)*($($('canvas')[1]).parent().position().left - 2), (1/y)*($($('canvas')[1]).parent().position().top - 2) );
-					context.restore();
-					
-				});
+			$('#image').change(function(){
+				var file = this.files[0];
+	            name = file.name;
+	            size = file.size;
+	            type = file.type;
+	            // alert(size);
+
+	            var formData = new FormData($('#upload-image')[0]);
+                    $.ajax({
+                        url: '/canvas-image',  //server script to process data
+                        type: 'POST',
+                        xhr: function() {  // custom xhr
+                            myXhr = $.ajaxSettings.xhr();
+                            if(myXhr.upload){ // if upload property exists
+                                myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // progressbar
+                            }
+                            return myXhr;
+                        },
+                        //Ajax events
+                        // success: completeHandler = function(data) {
+                        //     /*
+                        //     * workaround for crome browser // delete the fakepath
+                        //     */
+                        //     if(navigator.userAgent.indexOf('Chrome')) {
+                        //         var catchFile = $(":file").val().replace(/C:\\fakepath\\/i, '');
+                        //     }
+                        //     else {
+                        //         var catchFile = $(":file").val();
+                        //     }
+                        //     var writeFile = $(":file");
+
+                        //     writeFile.html(writer(catchFile));
+
+                        //     $("*setIdOfImageInHiddenInput*").val(data.logo_id);
+
+                        // },
+                        // error: errorHandler = function() {
+                        //     alert("Något gick fel");
+                        // },
+                        // Form data
+                        data: formData,
+                        //Options to tell JQuery not to process data or worry about content-type
+                        cache: false,
+                        contentType: false,
+                        processData: false
+                    }, 'json');
+
+
+
+
 			});
+
+			function progressHandlingFunction(){
+
+					}
+
+
+
+
+			// window.addEventListener('load', eventWindowLoaded, false);
+			// function eventWindowLoaded() {
+			//    canvasApp();
+			// }
+			
+			// function canvasApp(){
+			// 	var theCanvas = document.getElementById("canvas");
+			// 	var cvsStk = new CanvasStack("canvas");
+			// 	var context = theCanvas.getContext("2d");
+				// var layer1_ID = cvsStk.createLayer();
+				// var L1_ctx = document.getElementById(layer1_ID).getContext('2d');
+				
+				// var tShirt = new Image();
+				// tShirt.addEventListener('load', eventShipLoaded, false);
+				// tShirt.src = "/assets/tshirt.png";
+				
+				// var tree = new Image();
+				// tree.src = "/assets/tree.png";
+				
+				// function eventShipLoaded(){
+				// 	drawScreen();
+				// }
+				
+				// function drawScreen() {
+					
+				// 	context.fillStyle = "#ffffff"
+				// 	context.fillRect(0, 0, 500, 500);
+					
+				// 	context.drawImage(tShirt, 50, 50);
+					
+			// 		var new_can = document.getElementById(layer1_ID);
+			// 		new_can.style.border = "1px solid red";
+			// 		new_can.style.width = "292px";
+			// 		new_can.style.height = "256px";
+			// 		new_can.style.top = "104px";
+			// 		new_can.style.left = "122px";
+			// 		L1_ctx.scale(500/292, 500/256);
+			// 		L1_ctx.drawImage(tree, 0, 0);
+					
+			// 		var counter_top = 104;
+			// 		var counter_left = 122;
+					
+			// 		$('#'+layer1_ID).draggable({
+			// 			drag: function(event, ui) {
+			// 				$(this).parent().css('top', (ui.position.top + counter_top));
+			// 				$(this).parent().css('left', (ui.position.left + counter_left));
+			// 			},
+						
+			// 			stop: function(event, ui) {
+			// 				counter_top = ui.position.top + counter_top;
+			// 				counter_left = ui.position.left + counter_left;
+			// 			}
+			// 		});
+					
+			// 		$('#'+layer1_ID).resizable();
+					
+			// 	}
+				
+			// }
+			
+			// $(document).ready(function(){
+				
+			// 	$('#capture').click(function(){
+			// 		var theCanvas = document.getElementById("canvas");
+			// 		var context = theCanvas.getContext("2d");
+			// 		context.save();
+					
+			// 		var x = $($('canvas')[1]).width()/500;
+			// 		var y = $($('canvas')[1]).height()/500;
+					
+			// 		context.scale(x, y);
+					
+			// 		context.drawImage($('canvas')[1], (1/x)*($($('canvas')[1]).parent().position().left - 2), (1/y)*($($('canvas')[1]).parent().position().top - 2) );
+			// 		context.restore();
+					
+			// 	});
+			// });
+
+
+			$(document).ready(function(){
+				theCanvas = document.getElementById("canvas");
+				cvsStk = new CanvasStack("canvas");
+				context = theCanvas.getContext("2d");
+
+
+				// alert(0);
+				// loadNewCanvas();
+				// alert(1);
+
+
+
+
+					// loadNewCanvas();
+
+
+
+
+			});
+
+			function loadNewCanvas(image){
+				new canvasLayer(image);
+			}
+
+			function canvasLayer(image){
+				// alert(22);
+				this.canvas_id = cvsStk.createLayer();
+				this.canvas = document.getElementById(this.canvas_id);
+				this.context = (this.canvas).getContext('2d');
+				// this.image = $("#image-container img")[0];
+				this.image = image;
+
+
+				(this.canvas).style.border = "1px solid red";
+				this.canvas.style.width = this.image.width + "px";
+				this.canvas.style.height = this.image.height + "px";
+				this.canvas.width = this.image.width;
+				this.canvas.height = this.image.height;
+				this.context.drawImage(this.image, 0, 0);
+
+
+
+				// $('#'+this.canvas_id).draggable({
+				// 		drag: function(event, ui) {
+				// 			$(this).parent().css('top', (ui.position.top + counter_top));
+				// 			$(this).parent().css('left', (ui.position.left + counter_left));
+				// 		},
+						
+				// 		stop: function(event, ui) {
+				// 			counter_top = ui.position.top + counter_top;
+				// 			counter_left = ui.position.left + counter_left;
+				// 		}
+				// 	});
+
+					// $('#'+this.canvas_id).draggable();
+					
+					$('#'+this.canvas_id).resizable({handles: 'ne, se, sw, nw, n, e, s, w'});
+
+					$('#'+this.canvas_id).parent().draggable({
+    					stack: "div"
+					});
+
+					$('#'+this.canvas_id).rotate({
+						bind: {
+				            dblclick: function() {
+				                $(this).data('angle', $(this).data('angle')+90);
+				                var w = $(this).css('width');
+				                $(this).parent().rotate({ animateTo: $(this).data('angle')}).css({width: $(this).css('height'), height: w});
+
+				            }
+				        }
+
+
+
+
+					});
+
+
+
+			}
+
+			
+
+
+
+
+
 		</script>
 <% end %>
