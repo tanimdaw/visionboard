@@ -3,18 +3,18 @@
 	border: 2px solid green;
 }
 
-.ui-resizable-ne, 
-.ui-resizable-se,
-.ui-resizable-sw,
-.ui-resizable-nw {
+.selected .ui-resizable-ne, 
+.selected .ui-resizable-se,
+.selected .ui-resizable-sw,
+.selected .ui-resizable-nw {
 	border: 3px solid yellow;
 	background-color: yellow;
 }
 
-.ui-resizable-n, 
-.ui-resizable-s,
-.ui-resizable-w,
-.ui-resizable-e {
+.selected .ui-resizable-n, 
+.selected .ui-resizable-s,
+.selected .ui-resizable-w,
+.selected .ui-resizable-e {
 	border: 1px solid red;
 	background-color: red;
 }
