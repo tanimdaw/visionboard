@@ -14,5 +14,6 @@
 //= require jquery_ujs
 //= require jquery-ui
 //= require canvasStack1v04
+//= require kinetic
 //= require custom
 //= require_tree .

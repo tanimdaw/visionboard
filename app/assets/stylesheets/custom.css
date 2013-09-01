@@ -1,20 +1,3 @@
-.resize-wrapper {
-	display: inline-block;
-	border: 2px solid green;
-}
-
-.selected .ui-resizable-ne, 
-.selected .ui-resizable-se,
-.selected .ui-resizable-sw,
-.selected .ui-resizable-nw {
-	border: 3px solid yellow;
-	background-color: yellow;
-}
-
-.selected .ui-resizable-n, 
-.selected .ui-resizable-s,
-.selected .ui-resizable-w,
-.selected .ui-resizable-e {
-	border: 1px solid red;
-	background-color: red;
+#vboard {
+	border: 1px solid #cccccc;
 }

@@ -1,85 +1,19 @@
-<div style="position: absolute; top: 50px; left: 50px;">
-	<canvas id="canvas" width="1100" height="900" style="border: 2px solid black;">
-	 Your browser does not support HTML5 Canvas.
-	</canvas>
-</div>
-
-<%= form_tag(image_upload_path, :multipart => true, :id => "upload-image") do %>
-	<%= file_field_tag "image" %>
-<% end -%>
-<div id="image-container" style="display: none;">
-	<img src="/uploads/image/image/23/3q1opw.jpg" alt="3q1opw">
-</div>
-
-<a id="capture" href="javascript:void(0)">Capture</a>
+<section id='vboard'></section>
 
 <% content_for :script do %>
 	<script type="text/javascript">
 
-			$(document).ready(function(){
-				theCanvas = document.getElementById("canvas");
-				cvsStk = new CanvasStack("canvas");
-				context = theCanvas.getContext("2d");
-			});
+		    document.addEventListener('DOMContentLoaded', function() {
+		      //all our code here
+		      var vboard = document.querySelector('#vboard');
+		      var stage = new Kinetic.Stage({container: vboard, width: $("#vboard").width(), height: 500});
+		      var base_layer = new Kinetic.Layer();
+		      stage.add(base_layer);
+		      
+		      
+
+		    }, false);
 			
-			$('#image').change(function(){
-
-				var file = this.files[0];
-	            name = file.name;
-	            size = file.size;
-	            type = file.type;
-
-	            var formData = new FormData($('#upload-image')[0]);
-                    $.ajax({
-                        url: '/canvas-image',  //server script to process data
-                        type: 'POST',
-                        xhr: function() {  // custom xhr
-                            myXhr = $.ajaxSettings.xhr();
-                            if(myXhr.upload){ // if upload property exists
-                                myXhr.upload.addEventListener('progress', progressHandlingFunction, false); // progressbar
-                            }
-                            return myXhr;
-                        },
-                        data: formData,
-                        cache: false,
-                        contentType: false,
-                        processData: false
-                    }, 'json');
-
-			});
-
-			function progressHandlingFunction(){}
-
-			function canvasLayer(image){
-				this.canvas_id = cvsStk.createLayer();
-				this.canvas = document.getElementById(this.canvas_id);
-				this.context = (this.canvas).getContext('2d');
-				this.image = image;
-
-
-				//(this.canvas).style.border = "1px solid red";
-				this.canvas.style.width = this.image.width + "px";
-				this.canvas.style.height = this.image.height + "px";
-				this.canvas.width = this.image.width;
-				this.canvas.height = this.image.height;
-				this.context.drawImage(this.image, 0, 0);
-
-				$('#'+this.canvas_id).click(function(){
-					//unselect_all_canvas();
-					//$('canvas').parent().removeClass('selected');
-					$('#'+this.canvas_id).parent().addClass('selected');
-				});
-					
-					$('#'+this.canvas_id).resizable({handles: 'ne, se, sw, nw, n, e, s, w'});
-
-					$('#'+this.canvas_id).parent().draggable({
-    					stack: "div"
-					});
-			}
-
-			function unselect_all_canvas() {
-
-			}
 
 			
 
